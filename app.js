@@ -123,6 +123,22 @@ app.get("/workouts", function (req, res) {
   });
 });
 
+//traninigs route
+app.get("/trainings", function (req, res) {
+  Training.find({}, function (err, foundTrainings) {
+    if (foundTrainings.length === 0) {
+      //need to use create function. insertOne does not work here
+      Training.create(defaultTraining, function (err) {
+        if (!err) {
+          res.send("Successfully added default training");
+        } else {
+          res.send(err);
+        }
+      });
+    }
+  });
+});
+
 app.listen(3000, function () {
   console.log("Server started on port 3000");
 });
