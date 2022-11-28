@@ -1,6 +1,7 @@
 const bodyParser = require("body-parser");
 const express = require("express");
 const mongoose = require("mongoose");
+const _ = require("lodash");
 const ejs = require("ejs");
 
 const app = express();
@@ -72,6 +73,19 @@ const defaultTraining = new Training({
   routines: defaultWorkouts,
 });
 
+//root route
+app.get("/", function (req, res) {
+  res.render("home");
+});
+
+app.post("/", function (req, res) {
+  const muscleWorked = req.body.newMuscle;
+  console.log(muscleWorked);
+
+  //create new training document and add to db
+  //may have to create a new route with muscleWorked and timestamp
+});
+
 //chain route handlers
 
 //users route
@@ -135,6 +149,10 @@ app.get("/trainings", function (req, res) {
           res.send(err);
         }
       });
+    } else {
+      console.log(foundTrainings);
+      console.log(foundTrainings.date);
+      res.render("workout", { muscleGroup: foundTrainings.bodyPart });
     }
   });
 });
