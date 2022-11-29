@@ -80,11 +80,46 @@ app.get("/", function (req, res) {
 
 app.post("/", function (req, res) {
   const muscleWorked = req.body.newMuscle;
+  const date = new Date();
+  const timeStamp = date.toLocaleDateString();
   console.log(muscleWorked);
 
   //create new training document and add to db
   //may have to create a new route with muscleWorked and timestamp
+  Training.create(
+    { bodyPart: muscleWorked, date: timeStamp },
+    function (err, workout) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("Successfully saved new workout for " + muscleWorked);
+        //going to need to render correct workout using id. make a redirect to workout using id or timestamp
+        //res.render("workout", { muscleGroup: muscleWorked, date: timeStamp });
+        const workoutId = workout._id;
+        console.log(workoutId);
+        //add muscleWorked to url
+        res.redirect("/workout/" + workoutId);
+      }
+    }
+  );
 });
+
+//workout route where user will enter exercises for workout
+app.get("/workout/:id", function (req, res) {
+  const workoutId = req.params.id;
+
+  Training.findById(workoutId, function (err, foundWorkout) {
+    if (!err) {
+      console.log(foundWorkout.bodyPart);
+      res.render("workout", {
+        muscleGroup: foundWorkout.bodyPart,
+        timeStamp: foundWorkout.date,
+      });
+    }
+  });
+});
+
+//NEED TO CREATE EXERCISE ENTRIES FOR WORKOUT IN EJS AND ADD TO DB RESPECTIVELY IN APP.JS
 
 //chain route handlers
 
