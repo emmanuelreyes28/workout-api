@@ -3,8 +3,32 @@
 <div>
     <h1><%= muscleGroup %> Workout</h1>
     <p>
-         <%= timeStamp %>
+        <%= timeStamp %>
     </p>
+</div>
+
+<div>
+    <div>
+        <p>Exercise:</p>
+        <input placeholder="Squats"/>
+        <div>
+            <p>Weight (lbs):</p>
+            <input name="weight" type="number" placeholder="40"/>
+            <p>Number of Set(s):</p>
+            <input name="sets" type="number" placeholder="3">
+            <p>Number of Reps</p>
+            <input name="reps" type="number" placeholder="10"/>
+        </div>
+        <!-- use jquery to dynamically add new entry for weight, sets and reps inputs -->
+        <button>+</button>
+    </div>
+    <div>
+        <button onclick="addExercise">Add Exercise</button>
+    </div>
+</div>
+
+<div>
+    <button>Workout History</button>
 </div>
 
 <%- include("footer") %> 
