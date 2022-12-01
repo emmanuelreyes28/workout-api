@@ -119,6 +119,13 @@ app.get("/workout/:id", function (req, res) {
   });
 });
 
+//exercise post route update training doc in db with exercise info entered by user
+app.post("/workout/:id", function (req, res) {
+  //need to get workout id from params so we can redirect to same page after saving exercise info in db
+  console.log("In exercise route");
+  console.log(req.params.id);
+});
+
 //NEED TO CREATE EXERCISE ENTRIES FOR WORKOUT IN EJS AND ADD TO DB RESPECTIVELY IN APP.JS
 
 //chain route handlers
