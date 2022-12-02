@@ -11,7 +11,7 @@
 
 <div>
     <div>
-        <form action="/workout/" method="post">
+        <form action="/update" method="post">
             <p>Exercise:</p>
             <input name="exercise" placeholder="Squats"/>
             <div class="exercise-info-container">
@@ -23,6 +23,7 @@
                     <p>Number of Reps</p>
                     <input name="reps" type="number" placeholder="10"/>
                     <button type="submit">Exercise Completed</button>
+                    <input type="hidden" name="docId" value="<%=workoutId%>"/>
                 </div>     
             </div>
         </form> 

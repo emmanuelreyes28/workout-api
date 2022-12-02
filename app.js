@@ -112,6 +112,7 @@ app.get("/workout/:id", function (req, res) {
     if (!err) {
       console.log(foundWorkout.bodyPart);
       res.render("workout", {
+        workoutId: foundWorkout._id,
         muscleGroup: foundWorkout.bodyPart,
         timeStamp: foundWorkout.date,
       });
@@ -119,14 +120,34 @@ app.get("/workout/:id", function (req, res) {
   });
 });
 
-//exercise post route update training doc in db with exercise info entered by user
-app.post("/workout/:id", function (req, res) {
-  //need to get workout id from params so we can redirect to same page after saving exercise info in db
-  console.log("In exercise route");
-  console.log(req.params.id);
+//updates workouts for training using its id
+app.post("/update", function (req, res) {
+  const workoutId = req.body.docId;
+  const exerciseEntered = req.body.exercise;
+  const weightEntered = req.body.weight;
+  const setsEntered = req.body.sets;
+  const repsEntered = req.body.reps;
+
+  const newWorkout = new Workout({
+    workout: exerciseEntered,
+    weight: weightEntered,
+    sets: setsEntered,
+    reps: repsEntered,
+  });
+
+  Training.findByIdAndUpdate(
+    workoutId,
+    { $push: { routines: newWorkout } },
+    function (err, foundTraining) {
+      if (!err) {
+        res.send("Successfully pushed new workout to routines array");
+      } else {
+        console.log(err);
+      }
+    }
+  );
 });
 
-//NEED TO CREATE EXERCISE ENTRIES FOR WORKOUT IN EJS AND ADD TO DB RESPECTIVELY IN APP.JS
 
 //chain route handlers
 
