@@ -1,0 +1,28 @@
+<%- include("header") %>
+
+<div>
+    <h1>I am in the history page</h1>
+</div>
+
+<div>
+    <% trainings.forEach(function(training){ %>
+        <h2><%= training.bodyPart %></h2>
+        <p><%= training.date %></p>
+        <% training.routines.forEach(function(exercise){ %>
+            <table>
+                <th>Exercise</th>
+                <th>Weight (lbs)</th>
+                <th>Sets</th>
+                <th>Reps</th>
+                <tr>
+                    <td><%= exercise.workout %></td>
+                    <td><%= exercise.weight %></td>
+                    <td><%= exercise.sets %></td>
+                    <td><%= exercise.reps %></td>
+                </tr>
+            </table>
+        <% }); %>
+    <% }); %>
+</div>
+
+<%- include("footer") %> 

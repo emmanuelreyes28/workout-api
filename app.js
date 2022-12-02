@@ -84,24 +84,13 @@ app.post("/", function (req, res) {
   const timeStamp = date.toLocaleDateString();
   console.log(muscleWorked);
 
-  //create new training document and add to db
-  //may have to create a new route with muscleWorked and timestamp
-  Training.create(
-    { bodyPart: muscleWorked, date: timeStamp },
-    function (err, workout) {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log("Successfully saved new workout for " + muscleWorked);
-        //going to need to render correct workout using id. make a redirect to workout using id or timestamp
-        //res.render("workout", { muscleGroup: muscleWorked, date: timeStamp });
-        const workoutId = workout._id;
-        console.log(workoutId);
-        //add muscleWorked to url
-        res.redirect("/workout/" + workoutId);
-      }
-    }
-  );
+  const newTraining = new Training({ bodyPart: muscleWorked, date: timeStamp });
+
+  newTraining.save(function () {
+    let workoutId = newTraining._id;
+    console.log(newTraining._id);
+    res.redirect("/workout/" + workoutId);
+  });
 });
 
 //workout route where user will enter exercises for workout
@@ -147,6 +136,17 @@ app.post("/update", function (req, res) {
     }
   );
 });
+
+app.get("/history", function (req, res) {
+  Training.find({}, function (err, foundTraining) {
+    console.log(foundTraining);
+    if (!err) {
+      res.render("history", { trainings: foundTraining });
+    }
+  });
+});
+
+
 
 
 //chain route handlers
