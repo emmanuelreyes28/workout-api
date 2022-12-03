@@ -82,13 +82,11 @@ app.post("/", function (req, res) {
   const muscleWorked = req.body.newMuscle;
   const date = new Date();
   const timeStamp = date.toLocaleDateString();
-  console.log(muscleWorked);
 
   const newTraining = new Training({ bodyPart: muscleWorked, date: timeStamp });
 
   newTraining.save(function () {
     let workoutId = newTraining._id;
-    console.log(newTraining._id);
     res.redirect("/workout/" + workoutId);
   });
 });
@@ -100,10 +98,12 @@ app.get("/workout/:id", function (req, res) {
   Training.findById(workoutId, function (err, foundWorkout) {
     if (!err) {
       console.log(foundWorkout.bodyPart);
+      console.log(foundWorkout.routines);
       res.render("workout", {
         workoutId: foundWorkout._id,
         muscleGroup: foundWorkout.bodyPart,
         timeStamp: foundWorkout.date,
+        exercises: foundWorkout.routines,
       });
     }
   });
@@ -129,7 +129,12 @@ app.post("/update", function (req, res) {
     { $push: { routines: newWorkout } },
     function (err, foundTraining) {
       if (!err) {
-        res.send("Successfully pushed new workout to routines array");
+        console.log("here");
+        console.log(foundTraining);
+        //res.send("Successfully pushed new workout to routines array");
+        foundTraining.save(function () {
+          res.redirect("/workout/" + workoutId);
+        });
       } else {
         console.log(err);
       }

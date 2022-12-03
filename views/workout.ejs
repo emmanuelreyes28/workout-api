@@ -10,10 +10,30 @@
 </div>
 
 <div>
-    <div>
+    <table>
+        <th>Exercise</th>
+        <th>Weight (lbs)</th>
+        <th>Sets</th>
+        <th>Reps</th>
+        
+        <% exercises.forEach(function(exercise){ %>
+            <tr>
+                <td><%= exercise.workout %></td>
+                <td><%= exercise.weight %></td>
+                <td><%= exercise.sets %></td>
+                <td><%= exercise.reps %></td>
+            </tr>
+        <% }); %>
+        
+    </table>
+    
+</div>
+
+<div>
+    <div class="container">
         <form action="/update" method="post">
             <p>Exercise:</p>
-            <input name="exercise" placeholder="Squats"/>
+            <input name="exercise" type="text" placeholder="Squats"/>
             <div class="exercise-info-container">
                 <div class="exercise-info">
                     <p>Weight (lbs):</p>
@@ -34,7 +54,7 @@
     </div>
 
     <div>
-        <button onclick="addExercise">Add Exercise</button>
+        <button class="btn-exercise">Add Exercise</button>
     </div>
 </div>
 
@@ -50,6 +70,11 @@
         console.log("clicked");
         //clone last exercise info container and insert after last exercise info container to avoid doubling and remove values 
         $(".exercise-info-container:last").clone().insertAfter(".exercise-info-container:last").find("input[type='number']").val("");
+    });
+
+    $(".btn-exercise").click(function(){
+        console.log("CLICKED!");
+        $(".container:last").clone().insertAfter(".container:last").find("input").val("");
     });
 
 </script>
