@@ -1,7 +1,5 @@
 <%- include("header") %>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-
 <div>
     <h1><%= muscleGroup %> Workout</h1>
     <p>
@@ -32,29 +30,30 @@
 <div>
     <div class="container">
         <form action="/update" method="post">
-            <p>Exercise:</p>
-            <input name="exercise" type="text" placeholder="Squats"/>
+            <label>Exercise:</label>
+            <input name="exercise" type="text" />
             <div class="exercise-info-container">
                 <div class="exercise-info">
-                    <p>Weight (lbs):</p>
-                    <input name="weight" type="number" placeholder="40"/>
-                    <p>Number of Set(s):</p>
-                    <input name="sets" type="number" placeholder="3">
-                    <p>Number of Reps</p>
-                    <input name="reps" type="number" placeholder="10"/>
-                    <button type="submit">Exercise Completed</button>
+                    <div>
+                        <label>Weight (lbs):</label>
+                        <input name="weight" type="number" />
+                    </div>
+                    
+                    <div>
+                        <label>Number of Set(s):</label>
+                        <input name="sets" type="number" >
+                    </div>
+                    
+                    <div>
+                        <label>Number of Reps</label>
+                        <input name="reps" type="number"/>
+                    </div>
+                    
+                    <button type="submit">Log Exercise</button>
                     <input type="hidden" name="docId" value="<%=workoutId%>"/>
                 </div>     
             </div>
         </form> 
-    </div>
-
-    <div>
-        <button class="add-info-entry">+</button>
-    </div>
-
-    <div>
-        <button class="btn-exercise">Add Exercise</button>
     </div>
 </div>
 
@@ -64,19 +63,5 @@
     </form>
     
 </div>
-
-<script>
-    $(".add-info-entry").click(function () {
-        console.log("clicked");
-        //clone last exercise info container and insert after last exercise info container to avoid doubling and remove values 
-        $(".exercise-info-container:last").clone().insertAfter(".exercise-info-container:last").find("input[type='number']").val("");
-    });
-
-    $(".btn-exercise").click(function(){
-        console.log("CLICKED!");
-        $(".container:last").clone().insertAfter(".container:last").find("input").val("");
-    });
-
-</script>
 
 <%- include("footer") %> 

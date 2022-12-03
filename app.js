@@ -1,7 +1,6 @@
 const bodyParser = require("body-parser");
 const express = require("express");
 const mongoose = require("mongoose");
-const _ = require("lodash");
 const ejs = require("ejs");
 
 const app = express();
@@ -78,6 +77,7 @@ app.get("/", function (req, res) {
   res.render("home");
 });
 
+//create new training document when user enters new training in root route
 app.post("/", function (req, res) {
   const muscleWorked = req.body.newMuscle;
   const date = new Date();
@@ -95,10 +95,9 @@ app.post("/", function (req, res) {
 app.get("/workout/:id", function (req, res) {
   const workoutId = req.params.id;
 
+  //find doc using id and pass values to ejs template
   Training.findById(workoutId, function (err, foundWorkout) {
     if (!err) {
-      console.log(foundWorkout.bodyPart);
-      console.log(foundWorkout.routines);
       res.render("workout", {
         workoutId: foundWorkout._id,
         muscleGroup: foundWorkout.bodyPart,
@@ -109,7 +108,7 @@ app.get("/workout/:id", function (req, res) {
   });
 });
 
-//updates workouts for training using its id
+//updates workouts for training using its id and redirect to same page with logged workout
 app.post("/update", function (req, res) {
   const workoutId = req.body.docId;
   const exerciseEntered = req.body.exercise;
@@ -117,6 +116,7 @@ app.post("/update", function (req, res) {
   const setsEntered = req.body.sets;
   const repsEntered = req.body.reps;
 
+  //create new workout doc with values entered by user
   const newWorkout = new Workout({
     workout: exerciseEntered,
     weight: weightEntered,
@@ -124,14 +124,12 @@ app.post("/update", function (req, res) {
     reps: repsEntered,
   });
 
+  //update training doc using doc id and pushing new workout entered
   Training.findByIdAndUpdate(
     workoutId,
     { $push: { routines: newWorkout } },
     function (err, foundTraining) {
       if (!err) {
-        console.log("here");
-        console.log(foundTraining);
-        //res.send("Successfully pushed new workout to routines array");
         foundTraining.save(function () {
           res.redirect("/workout/" + workoutId);
         });
@@ -142,6 +140,7 @@ app.post("/update", function (req, res) {
   );
 });
 
+//renders all workouts entered into logs
 app.get("/history", function (req, res) {
   Training.find({}, function (err, foundTraining) {
     console.log(foundTraining);
@@ -151,79 +150,6 @@ app.get("/history", function (req, res) {
   });
 });
 
-
-
-
-//chain route handlers
-
-//users route
-app
-  .route("/users")
-
-  //fetch all users from workoutsDB
-  .get(function (req, res) {
-    User.find(function (err, foundUsers) {
-      if (!err) {
-        res.send(foundUsers);
-      } else {
-        res.send(err);
-      }
-    });
-  })
-
-  //post new data requested to workoutDB users collection
-  .post(function (req, res) {
-    const newUser = new User({
-      name: req.body.name,
-      age: req.body.age,
-    });
-
-    //save if no errors were encountered
-    newUser.save(function (err) {
-      if (!err) {
-        res.send("Successfully added new user");
-      } else {
-        res.send(err);
-      }
-    });
-  });
-
-//workouts route
-app.get("/workouts", function (req, res) {
-  Workout.find({}, function (err, foundWorkouts) {
-    //check if workouts collection is empty if so save default workouts
-    if (foundWorkouts.length === 0) {
-      Workout.insertMany(defaultWorkouts, function (err) {
-        if (!err) {
-          res.send("Successfully added default workouts");
-        } else {
-          res.send(err);
-        }
-      });
-      //res.redirect("/");
-    }
-  });
-});
-
-//traninigs route
-app.get("/trainings", function (req, res) {
-  Training.find({}, function (err, foundTrainings) {
-    if (foundTrainings.length === 0) {
-      //need to use create function. insertOne does not work here
-      Training.create(defaultTraining, function (err) {
-        if (!err) {
-          res.send("Successfully added default training");
-        } else {
-          res.send(err);
-        }
-      });
-    } else {
-      console.log(foundTrainings);
-      console.log(foundTrainings.date);
-      res.render("workout", { muscleGroup: foundTrainings.bodyPart });
-    }
-  });
-});
 
 app.listen(3000, function () {
   console.log("Server started on port 3000");
