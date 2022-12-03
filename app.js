@@ -17,12 +17,6 @@ mongoose.connect("mongodb://localhost:27017/workoutsDB", {
   useNewUrlParser: true,
 });
 
-//schema contents
-const userSchema = {
-  name: String,
-  age: Number,
-};
-
 const workoutSchema = {
   workout: String,
   weight: Number,
@@ -37,7 +31,6 @@ const trainingSchema = {
 };
 
 //collection within workoutsDB
-const User = mongoose.model("User", userSchema);
 const Workout = mongoose.model("Workout", workoutSchema);
 const Training = mongoose.model("Training", trainingSchema);
 
@@ -134,7 +127,7 @@ app.post("/update", function (req, res) {
           res.redirect("/workout/" + workoutId);
         });
       } else {
-        console.log(err);
+        res.send(err);
       }
     }
   );
@@ -143,9 +136,10 @@ app.post("/update", function (req, res) {
 //renders all workouts entered into logs
 app.get("/history", function (req, res) {
   Training.find({}, function (err, foundTraining) {
-    console.log(foundTraining);
     if (!err) {
       res.render("history", { trainings: foundTraining });
+    } else {
+      res.send(err);
     }
   });
 });

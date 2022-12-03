@@ -1,19 +1,24 @@
 <%- include("header") %> 
 
 <div>
-    <h1>My Workout Log</h1>
-    <div>
+    <div class="box" id="heading">
+        <h1>My Workout Log</h1>
+    </div>
+    
+    <div class="box">
         <form action="/" method="post">
             <label>Today I am training: </label>
             <input name="newMuscle" placeholder="Chest, Upper, Legs"/>
             <button type="submit">Submit</button>
         </form>
-    </div>
 
-    <div>
         <form action="/history" method="get">
             <button type="submit">Workout History</button>
         </form>
+    </div>
+
+    <div>
+        
     </div>
 </div>
 
